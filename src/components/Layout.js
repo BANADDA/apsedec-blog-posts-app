@@ -119,7 +119,7 @@ const Layout = () => {
                         {currentScreen === 'Account' && <Account />}
                         {currentScreen === 'BlogView' && <BlogView blog={selectedBlog} />} {/* Render BlogView with selected blog */}
 
-                        {currentScreen === 'BlogPosts' && (
+                        {/* {currentScreen === 'BlogPosts' && ( */}
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -142,7 +142,7 @@ const Layout = () => {
                             >
                                 New Blog
                             </Button>
-                        )}
+                        {/* )} */}
                         <BlogPostModal open={isModalOpen} onClose={handleModalClose} />
                     </Box>
                 </Box>
