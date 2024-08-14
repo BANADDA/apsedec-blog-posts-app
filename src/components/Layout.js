@@ -1,4 +1,4 @@
-import { AccountBox, Add, Home, LogoutOutlined } from '@mui/icons-material';
+import { AccountBox, Add, Home, LogoutOutlined, PhotoAlbumOutlined } from '@mui/icons-material';
 import { AppBar, Box, Button, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ import BlogPostModal from '../widgets/BlogPostModal';
 import Account from './Account';
 import BlogList from './BlogList';
 import BlogView from './BlogView'; // New component for viewing a blog
+import Gallery from './Gallery';
 
 const drawerWidth = 240;
 
@@ -52,6 +53,7 @@ const Sidebar = ({ currentScreen, setCurrentScreen, navigate }) => {
 <List>
     {[
         { text: 'Blog Posts', icon: <Home sx={{ color: '#ffffff' }} />, component: 'BlogPosts' },
+        { text: 'Gallery', icon: <PhotoAlbumOutlined sx={{ color: '#ffffff' }} />, component: 'Gallery' },
         { text: 'Account', icon: <AccountBox sx={{ color: '#ffffff' }} />, component: 'Account' },
         { text: 'Logout', icon: <LogoutOutlined sx={{ color: '#ffffff' }} />, action: handleLogout },
     ].map((item) => (
@@ -131,6 +133,7 @@ const Layout = () => {
                         {currentScreen === 'BlogPosts' && <BlogList onView={handleViewBlog} />} {/* Pass handleViewBlog */}
                         {currentScreen === 'Account' && <Account />}
                         {currentScreen === 'BlogView' && <BlogView blog={selectedBlog} />} {/* Render BlogView with selected blog */}
+                        {currentScreen === 'Gallery' && <Gallery />} {/* Render Gallery when selected */}
 
                         {currentScreen === 'BlogPosts' && (
                             <Button
@@ -144,14 +147,14 @@ const Layout = () => {
                                     marginBottom: 5,
                                     fontSize: '1.2rem',
                                     padding: '12px 24px',
-                                    backgroundColor: !auth.currentUser ? '#cfcfcf' : 'primary.main', // Muted color when not logged in
-                                    color: !auth.currentUser ? '#a9a9a9' : '#ffffff', // Muted text color
+                                    backgroundColor: !auth.currentUser ? '#cfcfcf' : 'primary.main',
+                                    color: !auth.currentUser ? '#a9a9a9' : '#ffffff',
                                     '&:hover': {
                                         backgroundColor: !auth.currentUser ? '#cfcfcf' : 'primary.dark',
                                     },
                                 }}
-                                onClick={auth.currentUser ? handleModalOpen : null} // Disable functionality if not logged in
-                                disabled={!auth.currentUser} // Disable button if not logged in
+                                onClick={auth.currentUser ? handleModalOpen : null}
+                                disabled={!auth.currentUser}
                             >
                                 New Blog
                             </Button>
@@ -162,6 +165,5 @@ const Layout = () => {
             </Box>
         </>
     );
-}
-
+};
 export default Layout;
