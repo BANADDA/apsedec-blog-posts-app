@@ -27,38 +27,51 @@ const Sidebar = ({ currentScreen, setCurrentScreen, navigate }) => {
             sx={{
                 width: drawerWidth,
                 flexShrink: 0,
-                '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#F5F5F5', color: '#333' },
+                '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#034B05', color: '#FDFCFC' },
             }}
         >
             <Toolbar />
             <Box sx={{ overflow: 'auto', padding: 2 }}>
-                <Button variant="outlined" color="primary" fullWidth sx={{ marginBottom: 2 }}>
-                    APSEDEC POSTS
-                </Button>
-                <Divider />
-                <List>
-                    {[
-                        { text: 'Blog Posts', icon: <Home />, component: 'BlogPosts' },
-                        { text: 'Account', icon: <AccountBox />, component: 'Account' },
-                        { text: 'Logout', icon: <LogoutOutlined />, action: handleLogout },
-                    ].map((item) => (
-                        <ListItem
-                            button
-                            key={item.text}
-                            selected={currentScreen === item.component}
-                            onClick={() => {
-                                if (item.action) {
-                                    item.action();
-                                } else {
-                                    setCurrentScreen(item.component);
-                                }
-                            }}
-                        >
-                            <ListItemIcon>{item.icon}</ListItemIcon>
-                            <ListItemText primary={item.text} />
-                        </ListItem>
-                    ))}
-                </List>
+            <Button
+  variant="outlined"
+  color="primary"
+  fullWidth
+  sx={{
+    marginBottom: 2,
+    color: '#ffffff', // Set the text color to white
+    borderColor: '#ffffff', // Set the border color to white
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)', // Optional: Set a slightly visible background on hover
+      borderColor: '#ffffff',
+    },
+  }}
+>
+  APSEDEC POSTS
+</Button>
+                <Divider sx={{ backgroundColor: '#ffffff' }} /> {/* Make the divider white */}
+<List>
+    {[
+        { text: 'Blog Posts', icon: <Home sx={{ color: '#ffffff' }} />, component: 'BlogPosts' },
+        { text: 'Account', icon: <AccountBox sx={{ color: '#ffffff' }} />, component: 'Account' },
+        { text: 'Logout', icon: <LogoutOutlined sx={{ color: '#ffffff' }} />, action: handleLogout },
+    ].map((item) => (
+        <ListItem
+            button
+            key={item.text}
+            selected={currentScreen === item.component}
+            onClick={() => {
+                if (item.action) {
+                    item.action();
+                } else {
+                    setCurrentScreen(item.component);
+                }
+            }}
+        >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} sx={{ color: '#ffffff' }} /> {/* Optional: Make the text white */}
+        </ListItem>
+    ))}
+</List>
             </Box>
         </Drawer>
     );
@@ -102,7 +115,7 @@ const Layout = () => {
             <AuthModal open={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
             <Box sx={{ display: 'flex', minHeight: '100vh' }} className='bg-slate-100'>
                 <CssBaseline />
-                <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, background: 'linear-gradient(135deg, #6e8efb, #a777e3)' }}>
+                <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: '#034B05' }}>
                     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Box display="flex" alignItems="center">
                             <Typography variant="h5" noWrap component="div">
@@ -113,7 +126,7 @@ const Layout = () => {
                 </AppBar>
                 <Box sx={{ display: 'flex', width: '100%' }}>
                     <Sidebar currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} navigate={navigate} />
-                    <Box component="main" sx={{ flexGrow: 1, p: 3, minHeight: '100vh', position: 'relative' }} className='bg-slate-100'>
+                    <Box component="main" sx={{ backgroundColor: '#F0F4F0', flexGrow: 1, p: 3, minHeight: '100vh', position: 'relative' }} className='bg-slate-100'>
                         <Toolbar />
                         {currentScreen === 'BlogPosts' && <BlogList onView={handleViewBlog} />} {/* Pass handleViewBlog */}
                         {currentScreen === 'Account' && <Account />}
