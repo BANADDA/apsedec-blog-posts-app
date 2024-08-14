@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Layout from './components/Layout';
+import AuthModal from './widgets/AuthModal';
 
 function App() {
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const auth = getAuth();
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setAuthModalOpen(false); // Close the modal when user is logged in
+      } else {
+        setAuthModalOpen(true); // Open the modal if the user is not logged in
+      }
+    });
+
+    return () => unsubscribeAuth();
+  }, [auth]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Layout />
+      <AuthModal open={isAuthModalOpen} onClose={() => setAuthModalOpen(false)} />
+    </Router>
   );
 }
 
