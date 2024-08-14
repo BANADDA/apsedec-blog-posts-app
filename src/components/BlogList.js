@@ -98,6 +98,7 @@ const BlogList = ({ onView }) => {
                             createdAt={blog.createdAt}
                             caption={blog.caption}
                             onView={() => onView(blog)}
+                            onDelete={() => handleDeleteClick(blog)}
                         />
                     </Grid>
                 ))}
