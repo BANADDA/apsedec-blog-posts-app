@@ -1,4 +1,4 @@
-import { AccountBox, Add, Home, LogoutOutlined, PhotoAlbumOutlined } from '@mui/icons-material';
+import { AccountBox, Add, Home, HomeMax, LogoutOutlined, PhotoAlbumOutlined } from '@mui/icons-material';
 import { AppBar, Box, Button, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { getAuth, signOut } from "firebase/auth";
 import React, { useEffect, useState } from 'react';
@@ -7,8 +7,9 @@ import AuthModal from '../widgets/AuthModal';
 import BlogPostModal from '../widgets/BlogPostModal';
 import Account from './Account';
 import BlogList from './BlogList';
-import BlogView from './BlogView'; // New component for viewing a blog
+import BlogView from './BlogView';
 import Gallery from './Gallery';
+import ContentDataForm from './Web/Home';
 
 const drawerWidth = 240;
 
@@ -33,47 +34,48 @@ const Sidebar = ({ currentScreen, setCurrentScreen, navigate }) => {
         >
             <Toolbar />
             <Box sx={{ overflow: 'auto', padding: 2 }}>
-            <Button
-  variant="outlined"
-  color="primary"
-  fullWidth
-  sx={{
-    marginBottom: 2,
-    color: '#ffffff', // Set the text color to white
-    borderColor: '#ffffff', // Set the border color to white
-    '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)', // Optional: Set a slightly visible background on hover
-      borderColor: '#ffffff',
-    },
-  }}
->
-  APSEDEC POSTS
-</Button>
-                <Divider sx={{ backgroundColor: '#ffffff' }} /> {/* Make the divider white */}
-<List>
-    {[
-        { text: 'Blog Posts', icon: <Home sx={{ color: '#ffffff' }} />, component: 'BlogPosts' },
-        { text: 'Gallery', icon: <PhotoAlbumOutlined sx={{ color: '#ffffff' }} />, component: 'Gallery' },
-        { text: 'Account', icon: <AccountBox sx={{ color: '#ffffff' }} />, component: 'Account' },
-        { text: 'Logout', icon: <LogoutOutlined sx={{ color: '#ffffff' }} />, action: handleLogout },
-    ].map((item) => (
-        <ListItem
-            button
-            key={item.text}
-            selected={currentScreen === item.component}
-            onClick={() => {
-                if (item.action) {
-                    item.action();
-                } else {
-                    setCurrentScreen(item.component);
-                }
-            }}
-        >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} sx={{ color: '#ffffff' }} /> {/* Optional: Make the text white */}
-        </ListItem>
-    ))}
-</List>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{
+                        marginBottom: 2,
+                        color: '#ffffff',
+                        borderColor: '#ffffff',
+                        '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            borderColor: '#ffffff',
+                        },
+                    }}
+                >
+                    APSEDEC POSTS
+                </Button>
+                <Divider sx={{ backgroundColor: '#ffffff' }} />
+                <List>
+                    {[
+                        { text: 'Home Page', icon: <Home sx={{ color: '#ffffff' }} />, component: 'HomePage' },
+                        { text: 'Blog Posts', icon: <HomeMax sx={{ color: '#ffffff' }} />, component: 'BlogPosts' },
+                        { text: 'Gallery', icon: <PhotoAlbumOutlined sx={{ color: '#ffffff' }} />, component: 'Gallery' },
+                        { text: 'Account', icon: <AccountBox sx={{ color: '#ffffff' }} />, component: 'Account' },
+                        { text: 'Logout', icon: <LogoutOutlined sx={{ color: '#ffffff' }} />, action: handleLogout },
+                    ].map((item) => (
+                        <ListItem
+                            button
+                            key={item.text}
+                            selected={currentScreen === item.component}
+                            onClick={() => {
+                                if (item.action) {
+                                    item.action();
+                                } else {
+                                    setCurrentScreen(item.component);
+                                }
+                            }}
+                        >
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText primary={item.text} sx={{ color: '#ffffff' }} />
+                        </ListItem>
+                    ))}
+                </List>
             </Box>
         </Drawer>
     );
@@ -81,7 +83,7 @@ const Sidebar = ({ currentScreen, setCurrentScreen, navigate }) => {
 
 const Layout = () => {
     const [currentScreen, setCurrentScreen] = useState('BlogPosts');
-    const [selectedBlog, setSelectedBlog] = useState(null); // State to store the selected blog
+    const [selectedBlog, setSelectedBlog] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isAuthModalOpen, setAuthModalOpen] = useState(false);
     const navigate = useNavigate();
@@ -90,13 +92,13 @@ const Layout = () => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                setAuthModalOpen(false); // Close the modal when user is logged in
+                setAuthModalOpen(false);
             } else {
-                setAuthModalOpen(true); // Open the modal if the user is not logged in
+                setAuthModalOpen(true);
             }
         });
 
-        return () => unsubscribe(); // Clean up the listener on unmount
+        return () => unsubscribe();
     }, [auth]);
 
     const handleModalOpen = () => {
@@ -109,7 +111,7 @@ const Layout = () => {
 
     const handleViewBlog = (blog) => {
         setSelectedBlog(blog);
-        setCurrentScreen('BlogView'); // Switch to the blog view screen
+        setCurrentScreen('BlogView');
     };
 
     return (
@@ -130,10 +132,11 @@ const Layout = () => {
                     <Sidebar currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} navigate={navigate} />
                     <Box component="main" sx={{ backgroundColor: '#F0F4F0', flexGrow: 1, p: 3, minHeight: '100vh', position: 'relative' }} className='bg-slate-100'>
                         <Toolbar />
-                        {currentScreen === 'BlogPosts' && <BlogList onView={handleViewBlog} />} {/* Pass handleViewBlog */}
+                        {currentScreen === 'HomePage' && <ContentDataForm />}
+                        {currentScreen === 'BlogPosts' && <BlogList onView={handleViewBlog} />}
                         {currentScreen === 'Account' && <Account />}
-                        {currentScreen === 'BlogView' && <BlogView blog={selectedBlog} />} {/* Render BlogView with selected blog */}
-                        {currentScreen === 'Gallery' && <Gallery />} {/* Render Gallery when selected */}
+                        {currentScreen === 'BlogView' && <BlogView blog={selectedBlog} />}
+                        {currentScreen === 'Gallery' && <Gallery />}
 
                         {currentScreen === 'BlogPosts' && (
                             <Button
@@ -166,4 +169,5 @@ const Layout = () => {
         </>
     );
 };
+
 export default Layout;
