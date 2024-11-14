@@ -60,5 +60,7 @@ const uploadBlogPost = async (userId, title, caption, captionImageFile, galleryI
     const docRef = await addDoc(collection(db, "blogs"), blogPostData);
     return docRef.id;
 }
+const storage = getStorage(app);
 
-export { db, uploadBlogPost };
+export { analytics, app, db, storage, uploadBlogPost };
+
